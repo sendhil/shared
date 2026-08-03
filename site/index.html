@@ -38,8 +38,16 @@
           ? `
             <div class="cost-estimate" aria-label="Estimated API cost">
               <p class="estimate-kicker">Build estimate · ${project.estimate.tokens}</p>
-              <div class="estimate-lead"><strong>${project.estimate.current}</strong><span>${project.estimate.currentLabel}</span></div>
-              <div class="estimate-previous">${project.estimate.previous} · ${project.estimate.previousLabel}</div>
+              <div class="estimate-columns">
+                <div class="estimate-column estimate-current">
+                  <p class="estimate-heading">Current pricing</p>
+                  ${project.estimate.scenarios.map((scenario) => `<div class="estimate-row"><span>${scenario.label}</span><strong>${scenario.current}</strong></div>`).join('')}
+                </div>
+                <div class="estimate-column estimate-previous">
+                  <p class="estimate-heading">Previous pricing</p>
+                  ${project.estimate.scenarios.map((scenario) => `<div class="estimate-row"><span>${scenario.label}</span><strong>${scenario.previous}</strong></div>`).join('')}
+                </div>
+              </div>
               <p class="estimate-note">${project.estimate.assumption}</p>
             </div>
           `

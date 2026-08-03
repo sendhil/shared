@@ -11,11 +11,24 @@
       "note": "First prompt",
       "estimate": {
         "tokens": "949,824 tokens",
-        "current": "$0.38",
-        "currentLabel": "current pricing",
-        "previous": "$1.90",
-        "previousLabel": "previous pricing",
-        "assumption": "80/20 input-output estimate"
+        "assumption": "Rounded estimates using the same token count",
+        "scenarios": [
+          {
+            "label": "80/20 input-output",
+            "current": "$0.38",
+            "previous": "$1.90"
+          },
+          {
+            "label": "50/50 input-output",
+            "current": "$0.66",
+            "previous": "$3.32"
+          },
+          {
+            "label": "100% output",
+            "current": "$1.14",
+            "previous": "$5.70"
+          }
+        ]
       }
     },
     {
