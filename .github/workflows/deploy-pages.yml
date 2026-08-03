@@ -26,7 +26,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: hobbit-threejs/luna/package-lock.json
+          cache-dependency-path: |
+            hobbit-threejs/luna/package-lock.json
+            hobbit-threejs/sol/package-lock.json
 
       - name: Install Luna dependencies
         working-directory: hobbit-threejs/luna
@@ -41,6 +43,23 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: ./
+
+      - name: Install Sol dependencies
+        working-directory: hobbit-threejs/sol
+        run: npm ci
+
+      - name: Test Sol
+        working-directory: hobbit-threejs/sol
+        run: npm test
+
+      - name: Build Sol
+        working-directory: hobbit-threejs/sol
+        run: npm run build
+        env:
+          VITE_BASE: ./
+
+      - name: Test Pages assembler
+        run: node --test scripts/assemble-pages.test.mjs
 
       - name: Assemble Pages artifact
         run: node scripts/assemble-pages.mjs

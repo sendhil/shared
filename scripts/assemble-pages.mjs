@@ -2,27 +2,43 @@ import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const output = resolve(root, '_site');
-const copy = (source, destination) => cpSync(resolve(root, source), resolve(output, destination), { recursive: true });
+const defaultRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-rmSync(output, { recursive: true, force: true });
-mkdirSync(output, { recursive: true });
+export function assemblePages({
+  root = defaultRoot,
+  output = resolve(root, '_site'),
+} = {}) {
+  const copy = (source, destination) => cpSync(
+    resolve(root, source),
+    resolve(output, destination),
+    { recursive: true },
+  );
 
-copy('site', '.');
-copy('hobbit-threejs/luna/dist', 'hobbit-threejs/luna');
-copy('hobbit-threejs/sol/index.html', 'hobbit-threejs/sol/index.html');
+  rmSync(output, { recursive: true, force: true });
+  mkdirSync(output, { recursive: true });
 
-const required = [
-  'index.html',
-  'hobbit-threejs/luna/index.html',
-  'hobbit-threejs/luna/audio/narration.wav',
-  'hobbit-threejs/sol/index.html',
-];
+  copy('site', '.');
+  copy('hobbit-threejs/luna/dist', 'hobbit-threejs/luna');
+  copy('hobbit-threejs/sol/dist', 'hobbit-threejs/sol');
 
-const missing = required.filter((path) => !existsSync(resolve(output, path)));
-if (missing.length > 0) {
-  throw new Error(`Pages assembly is missing: ${missing.join(', ')}`);
+  const required = [
+    'index.html',
+    'hobbit-threejs/luna/index.html',
+    'hobbit-threejs/luna/audio/narration.wav',
+    'hobbit-threejs/sol/index.html',
+    'hobbit-threejs/sol/audio/narration.m4a',
+    'hobbit-threejs/sol/audio/narration.mp3',
+  ];
+
+  const missing = required.filter((path) => !existsSync(resolve(output, path)));
+  if (missing.length > 0) {
+    throw new Error(`Pages assembly is missing: ${missing.join(', ')}`);
+  }
+
+  console.log(`Assembled ${required.length} required Pages entries in ${output}`);
+  return { output, required };
 }
 
-console.log(`Assembled ${required.length} required Pages entries in ${output}`);
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  assemblePages();
+}

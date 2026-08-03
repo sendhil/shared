@@ -8,25 +8,27 @@ Once GitHub Pages is enabled for this repository, the collection lives at:
 
 <https://sendhil.github.io/shared/>
 
-The first project is the realistic Three.js village route:
+The two Hobbit Three.js interpretations are:
 
 <https://sendhil.github.io/shared/hobbit-threejs/luna/>
+
+<https://sendhil.github.io/shared/hobbit-threejs/sol/>
 
 ## Repository layout
 
 ```text
 site/                         showcase landing page
 hobbit-threejs/luna/          live Three.js experiment
-hobbit-threejs/sol/           second prompt comparison slot
+hobbit-threejs/sol/           live second-prompt Three.js experiment
 .github/workflows/            automatic Pages deployment
 ```
 
 Each experiment owns its source, assets, tests, and local README. The landing page is intentionally small so new projects can be added without turning this repository into a framework.
 
-## Run Luna locally
+## Run an experiment locally
 
 ```bash
-cd hobbit-threejs/luna
+cd hobbit-threejs/luna # or hobbit-threejs/sol
 npm install
 npm run dev
 ```
@@ -42,4 +44,4 @@ npm run build
 
 ## Publishing
 
-The workflow in `.github/workflows/deploy-pages.yml` runs the Luna tests and build, assembles the landing page plus nested projects, and deploys the result to GitHub Pages. In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions** once.
+The workflow in `.github/workflows/deploy-pages.yml` installs, tests, and builds both Luna and Sol, assembles the landing page plus nested projects, and deploys the result to GitHub Pages. In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions** once.

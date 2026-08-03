@@ -35,9 +35,30 @@
       "path": "./hobbit-threejs/sol/",
       "name": "Sol",
       "category": "Hobbit Three.js",
-      "status": "In progress",
-      "description": "A second pass on the same source material, kept beside Luna so the prompt differences stay easy to compare.",
-      "note": "Second prompt"
+      "status": "Live",
+      "description": "Built with 2,088,192 tokens. Estimated API cost starts at $20.88 under current pricing.",
+      "note": "Second prompt",
+      "estimate": {
+        "tokens": "2,088,192 tokens",
+        "assumption": "Estimated from total tokens; current rates use $5/M input and $30/M output, while previous rates follow Luna's 5× historical comparison.",
+        "scenarios": [
+          {
+            "label": "80/20 input-output",
+            "current": "$20.88",
+            "previous": "$104.41"
+          },
+          {
+            "label": "50/50 input-output",
+            "current": "$36.54",
+            "previous": "$182.72"
+          },
+          {
+            "label": "100% output",
+            "current": "$62.65",
+            "previous": "$313.23"
+          }
+        ]
+      }
     }
   ]
 }

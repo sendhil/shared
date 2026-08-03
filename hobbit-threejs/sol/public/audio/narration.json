@@ -1,0 +1,28 @@
+{
+  "voice": "Daniel",
+  "wordsPerMinute": 40,
+  "sentencePauseMilliseconds": 950,
+  "paragraphPauseMilliseconds": 1300,
+  "textSha256": "b0a69fca9e331fcb2b08f0980f04b2f694e73981fde831d9705ddd9261f47552",
+  "sourceBytes": 4889452,
+  "formats": {
+    "aiff": {
+      "duration": 110.779048,
+      "codec": "pcm_s16be",
+      "sampleRate": 22050,
+      "channels": 1
+    },
+    "m4a": {
+      "duration": 110.8,
+      "codec": "aac",
+      "sampleRate": 44100,
+      "channels": 1
+    },
+    "mp3": {
+      "duration": 110.779048,
+      "codec": "mp3",
+      "sampleRate": 44100,
+      "channels": 1
+    }
+  }
+}

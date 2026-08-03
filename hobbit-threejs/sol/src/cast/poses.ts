@@ -1,0 +1,301 @@
+import { clamp01, lerp } from '../timeline/easing';
+
+export const JOINT_NAMES = Object.freeze([
+  'hips',
+  'torso',
+  'neck',
+  'head',
+  'leftUpperArm',
+  'leftLowerArm',
+  'leftHand',
+  'rightUpperArm',
+  'rightLowerArm',
+  'rightHand',
+  'leftUpperLeg',
+  'leftLowerLeg',
+  'leftFoot',
+  'rightUpperLeg',
+  'rightLowerLeg',
+  'rightFoot',
+] as const);
+
+export type JointName = (typeof JOINT_NAMES)[number];
+export type JointRotation = readonly [x: number, y: number, z: number];
+export type Pose = Readonly<Record<JointName, JointRotation>>;
+
+export const REQUIRED_POSE_NAMES = Object.freeze([
+  'idle',
+  'walk',
+  'pinPaper',
+  'carryTray',
+  'cutFlowers',
+  'pullRibbon',
+  'hammer',
+  'pushCart',
+  'gossip',
+  'carryCrate',
+  'headShake',
+  'point',
+  'listen',
+  'present',
+  'recoil',
+  'elderLean',
+  'finalStillness',
+] as const);
+
+export type PoseName = (typeof REQUIRED_POSE_NAMES)[number];
+
+const ZERO: JointRotation = Object.freeze([0, 0, 0]);
+
+function rotation(x = 0, y = 0, z = 0): JointRotation {
+  if (![x, y, z].every(Number.isFinite)) throw new RangeError('joint rotations must be finite');
+  return Object.freeze([x, y, z]);
+}
+
+function authoredPose(values: Partial<Record<JointName, JointRotation>>): Pose {
+  return Object.freeze(Object.fromEntries(
+    JOINT_NAMES.map((joint) => [joint, values[joint] ?? ZERO]),
+  ) as Record<JointName, JointRotation>);
+}
+
+export const POSES: Readonly<Record<PoseName, Pose>> = Object.freeze({
+  idle: authoredPose({
+    hips: rotation(0, -0.03, 0.025),
+    torso: rotation(-0.015, 0.06, -0.025),
+    neck: rotation(0.02, -0.04, 0.015),
+    head: rotation(-0.025, 0.08, -0.018),
+    leftUpperArm: rotation(0.08, 0.03, -0.16),
+    leftLowerArm: rotation(-0.12, 0.02, -0.05),
+    leftHand: rotation(0.03, -0.04, -0.02),
+    rightUpperArm: rotation(-0.04, -0.02, 0.13),
+    rightLowerArm: rotation(-0.08, -0.01, 0.04),
+    rightHand: rotation(-0.02, 0.03, 0.015),
+    leftUpperLeg: rotation(0.015, 0, -0.025),
+    rightUpperLeg: rotation(-0.015, 0, 0.025),
+  }),
+  walk: authoredPose({
+    hips: rotation(0, 0.02, -0.035),
+    torso: rotation(0.08, -0.04, 0.035),
+    neck: rotation(-0.04, 0.03, -0.02),
+    head: rotation(-0.035, -0.07, 0.025),
+    leftUpperArm: rotation(-0.48, 0.08, -0.13),
+    leftLowerArm: rotation(-0.25, -0.04, -0.04),
+    rightUpperArm: rotation(0.48, -0.08, 0.14),
+    rightLowerArm: rotation(-0.36, 0.05, 0.04),
+    leftUpperLeg: rotation(0.46, 0.02, -0.025),
+    leftLowerLeg: rotation(-0.18, 0, 0),
+    leftFoot: rotation(-0.12, 0, 0),
+    rightUpperLeg: rotation(-0.42, -0.02, 0.02),
+    rightLowerLeg: rotation(0.55, 0, 0),
+    rightFoot: rotation(0.17, 0, 0),
+  }),
+  pinPaper: authoredPose({
+    hips: rotation(0, 0.14, 0.02),
+    torso: rotation(-0.08, 0.18, -0.04),
+    neck: rotation(-0.1, 0.08, 0.02),
+    head: rotation(-0.14, 0.12, 0.04),
+    leftUpperArm: rotation(-0.72, -0.22, -0.5),
+    leftLowerArm: rotation(-1.02, -0.06, -0.12),
+    leftHand: rotation(0.08, 0.12, -0.04),
+    rightUpperArm: rotation(-1.34, 0.08, 0.46),
+    rightLowerArm: rotation(-0.88, 0.02, 0.08),
+    rightHand: rotation(-0.18, 0.08, 0.04),
+    leftUpperLeg: rotation(0.08, 0.02, -0.04),
+    rightUpperLeg: rotation(-0.06, -0.02, 0.03),
+  }),
+  carryTray: authoredPose({
+    torso: rotation(-0.025, -0.04, 0),
+    head: rotation(0.06, 0.1, -0.02),
+    leftUpperArm: rotation(-0.74, -0.14, -0.47),
+    leftLowerArm: rotation(-1.25, 0, -0.02),
+    leftHand: rotation(0.12, 0, -0.03),
+    rightUpperArm: rotation(-0.76, 0.12, 0.47),
+    rightLowerArm: rotation(-1.22, 0, 0.02),
+    rightHand: rotation(0.1, 0, 0.03),
+    leftUpperLeg: rotation(0.08, 0, -0.02),
+    rightUpperLeg: rotation(-0.08, 0, 0.02),
+  }),
+  cutFlowers: authoredPose({
+    hips: rotation(0.32, -0.12, 0.04),
+    torso: rotation(0.48, 0.12, -0.08),
+    neck: rotation(-0.2, -0.08, 0.04),
+    head: rotation(0.28, -0.12, 0.04),
+    leftUpperArm: rotation(-0.38, 0.12, -0.42),
+    leftLowerArm: rotation(-0.88, -0.1, -0.08),
+    rightUpperArm: rotation(-0.58, -0.08, 0.32),
+    rightLowerArm: rotation(-1.02, 0.08, 0.1),
+    leftUpperLeg: rotation(-0.18, 0, -0.1),
+    leftLowerLeg: rotation(0.62, 0, 0),
+    rightUpperLeg: rotation(0.14, 0, 0.08),
+    rightLowerLeg: rotation(0.42, 0, 0),
+  }),
+  pullRibbon: authoredPose({
+    hips: rotation(0, -0.2, 0.04),
+    torso: rotation(0.12, -0.28, 0.08),
+    head: rotation(-0.06, 0.32, -0.08),
+    leftUpperArm: rotation(-0.68, 0.38, -0.76),
+    leftLowerArm: rotation(-0.72, -0.16, -0.1),
+    rightUpperArm: rotation(-0.34, -0.48, 0.7),
+    rightLowerArm: rotation(-0.54, 0.2, 0.08),
+    leftUpperLeg: rotation(0.22, 0, -0.06),
+    rightUpperLeg: rotation(-0.2, 0, 0.06),
+  }),
+  hammer: authoredPose({
+    hips: rotation(0, 0.12, -0.03),
+    torso: rotation(0.1, 0.16, -0.04),
+    head: rotation(-0.12, -0.14, 0.035),
+    leftUpperArm: rotation(-0.54, 0.18, -0.48),
+    leftLowerArm: rotation(-0.94, 0.12, -0.08),
+    rightUpperArm: rotation(-1.82, -0.12, 0.38),
+    rightLowerArm: rotation(-0.58, 0.08, 0.12),
+    rightHand: rotation(0.16, 0.02, 0.03),
+    leftUpperLeg: rotation(0.12, 0, -0.04),
+    rightUpperLeg: rotation(-0.1, 0, 0.04),
+  }),
+  pushCart: authoredPose({
+    hips: rotation(0.12, 0, 0),
+    torso: rotation(0.42, 0.02, 0),
+    neck: rotation(-0.18, 0, 0),
+    head: rotation(-0.12, -0.04, 0),
+    leftUpperArm: rotation(-0.88, 0.04, -0.24),
+    leftLowerArm: rotation(-0.36, 0, -0.04),
+    rightUpperArm: rotation(-0.9, -0.04, 0.24),
+    rightLowerArm: rotation(-0.34, 0, 0.04),
+    leftUpperLeg: rotation(0.3, 0, -0.04),
+    leftLowerLeg: rotation(-0.28, 0, 0),
+    rightUpperLeg: rotation(-0.26, 0, 0.04),
+    rightLowerLeg: rotation(0.38, 0, 0),
+  }),
+  gossip: authoredPose({
+    hips: rotation(0, 0.16, -0.02),
+    torso: rotation(-0.08, 0.34, -0.08),
+    neck: rotation(0.02, 0.16, 0.04),
+    head: rotation(-0.08, 0.38, 0.09),
+    leftUpperArm: rotation(-0.32, 0.18, -0.36),
+    leftLowerArm: rotation(-1.04, 0.18, -0.16),
+    leftHand: rotation(-0.08, 0.12, -0.12),
+    rightUpperArm: rotation(-0.92, -0.12, 0.52),
+    rightLowerArm: rotation(-1.35, -0.08, 0.12),
+    rightHand: rotation(0.06, -0.1, 0.08),
+    leftUpperLeg: rotation(0.04, 0, -0.03),
+    rightUpperLeg: rotation(-0.04, 0, 0.03),
+  }),
+  carryCrate: authoredPose({
+    hips: rotation(0.04, -0.03, 0),
+    torso: rotation(0.13, -0.06, 0.015),
+    neck: rotation(-0.08, 0.04, -0.02),
+    head: rotation(-0.12, -0.1, -0.03),
+    leftUpperArm: rotation(-0.94, -0.18, -0.42),
+    leftLowerArm: rotation(-1.18, 0.1, -0.08),
+    leftHand: rotation(0.12, 0.06, -0.04),
+    rightUpperArm: rotation(-0.98, 0.15, 0.44),
+    rightLowerArm: rotation(-1.14, -0.08, 0.1),
+    rightHand: rotation(0.1, -0.05, 0.04),
+    leftUpperLeg: rotation(0.2, 0, -0.025),
+    leftLowerLeg: rotation(-0.1, 0, 0),
+    rightUpperLeg: rotation(-0.18, 0, 0.025),
+    rightLowerLeg: rotation(0.26, 0, 0),
+  }),
+  headShake: authoredPose({
+    hips: rotation(0, -0.06, 0.03),
+    torso: rotation(-0.03, -0.15, 0.04),
+    neck: rotation(0.02, -0.22, -0.02),
+    head: rotation(0.02, -0.52, -0.04),
+    leftUpperArm: rotation(0.06, 0.02, -0.25),
+    leftLowerArm: rotation(-0.38, 0.02, -0.04),
+    rightUpperArm: rotation(-0.12, -0.02, 0.28),
+    rightLowerArm: rotation(-0.46, -0.02, 0.04),
+  }),
+  point: authoredPose({
+    hips: rotation(0, 0.18, -0.02),
+    torso: rotation(-0.04, 0.28, -0.04),
+    head: rotation(-0.05, 0.22, 0.02),
+    leftUpperArm: rotation(-0.18, 0.08, -0.24),
+    leftLowerArm: rotation(-0.48, 0.04, -0.06),
+    rightUpperArm: rotation(-1.1, -0.28, 0.62),
+    rightLowerArm: rotation(-0.18, -0.05, 0.06),
+    rightHand: rotation(-0.1, 0.1, 0.02),
+  }),
+  listen: authoredPose({
+    hips: rotation(0, -0.1, 0.02),
+    torso: rotation(-0.04, -0.18, 0.05),
+    neck: rotation(0.06, -0.18, -0.04),
+    head: rotation(0.04, -0.3, -0.09),
+    leftUpperArm: rotation(0.04, 0.02, -0.17),
+    leftLowerArm: rotation(-0.12, 0, -0.03),
+    rightUpperArm: rotation(-0.18, -0.12, 0.32),
+    rightLowerArm: rotation(-1.25, -0.08, 0.1),
+    rightHand: rotation(-0.14, -0.06, 0.04),
+  }),
+  present: authoredPose({
+    hips: rotation(0, 0.04, 0.015),
+    torso: rotation(-0.025, 0.06, -0.018),
+    neck: rotation(0.018, -0.035, 0.01),
+    head: rotation(-0.035, 0.07, -0.012),
+    leftUpperArm: rotation(-0.28, 0.08, -0.32),
+    leftLowerArm: rotation(-0.52, -0.02, -0.08),
+    leftHand: rotation(0.04, 0.08, -0.04),
+    rightUpperArm: rotation(-0.44, -0.09, 0.38),
+    rightLowerArm: rotation(-0.36, 0.04, 0.1),
+    rightHand: rotation(-0.08, -0.08, 0.04),
+    leftUpperLeg: rotation(0.025, 0, -0.025),
+    rightUpperLeg: rotation(-0.025, 0, 0.025),
+  }),
+  recoil: authoredPose({
+    hips: rotation(-0.08, -0.08, 0.04),
+    torso: rotation(-0.2, -0.12, 0.075),
+    neck: rotation(0.12, 0.14, -0.04),
+    head: rotation(0.13, 0.24, -0.07),
+    leftUpperArm: rotation(-0.26, 0.16, -0.44),
+    leftLowerArm: rotation(-0.7, -0.08, -0.12),
+    leftHand: rotation(-0.06, 0.1, -0.08),
+    rightUpperArm: rotation(-0.46, -0.18, 0.48),
+    rightLowerArm: rotation(-0.62, 0.08, 0.12),
+    rightHand: rotation(-0.08, -0.1, 0.08),
+    leftUpperLeg: rotation(0.12, 0, -0.05),
+    leftLowerLeg: rotation(-0.1, 0, 0),
+    rightUpperLeg: rotation(-0.1, 0, 0.05),
+    rightLowerLeg: rotation(0.14, 0, 0),
+  }),
+  elderLean: authoredPose({
+    hips: rotation(0.08, -0.08, 0.035),
+    torso: rotation(0.18, -0.2, 0.075),
+    neck: rotation(-0.04, -0.25, -0.035),
+    head: rotation(0.025, -0.5, -0.065),
+    leftUpperArm: rotation(-0.16, 0.04, -0.3),
+    leftLowerArm: rotation(-0.5, 0.02, -0.06),
+    leftHand: rotation(0.03, 0.04, -0.025),
+    rightUpperArm: rotation(-0.2, -0.04, 0.32),
+    rightLowerArm: rotation(-0.58, -0.02, 0.065),
+    rightHand: rotation(-0.025, -0.04, 0.03),
+    leftUpperLeg: rotation(0.055, 0, -0.035),
+    rightUpperLeg: rotation(-0.055, 0, 0.035),
+  }),
+  finalStillness: authoredPose({
+    hips: rotation(0, 0, 0),
+    torso: rotation(-0.025, 0, 0),
+    neck: rotation(0.02, 0, 0),
+    head: rotation(0.035, 0, 0),
+    leftUpperArm: rotation(0.035, 0, -0.1),
+    leftLowerArm: rotation(-0.05, 0, -0.02),
+    rightUpperArm: rotation(0.035, 0, 0.1),
+    rightLowerArm: rotation(-0.05, 0, 0.02),
+  }),
+});
+
+export function interpolatePose(from: Pose, to: Pose, progress: number): Pose {
+  if (!Number.isFinite(progress)) throw new RangeError('pose progress must be finite');
+  const amount = clamp01(progress);
+  if (amount === 0) return from;
+  if (amount === 1) return to;
+
+  return Object.freeze(Object.fromEntries(JOINT_NAMES.map((joint) => {
+    const start = from[joint];
+    const end = to[joint];
+    return [joint, rotation(
+      lerp(start[0], end[0], amount),
+      lerp(start[1], end[1], amount),
+      lerp(start[2], end[2], amount),
+    )];
+  })) as Record<JointName, JointRotation>);
+}
