@@ -4,15 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#11130f" />
-    <title>shared — experiments worth sending</title>
+    <title>shared — a few things I made</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="page-shell">
       <header class="hero">
         <p class="eyebrow">sendhil / shared</p>
-        <h1>Things worth sending.</h1>
-        <p class="hero-copy" id="intro">Loading the collection…</p>
+        <h1>A few things I made.</h1>
       </header>
 
       <section class="collection" aria-labelledby="collection-title">
@@ -24,7 +23,6 @@
       </section>
 
       <footer class="footer">
-        <span>Built in public, one strange idea at a time.</span>
         <a href="https://github.com/sendhil/shared">View source on GitHub ↗</a>
       </footer>
     </main>
@@ -55,10 +53,10 @@
         const response = await fetch('./catalog.json');
         if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
         const catalog = await response.json();
-        intro.textContent = catalog.intro;
+        if (intro) intro.textContent = catalog.intro;
         catalog.projects.forEach((project) => grid.append(renderProject(project)));
       } catch (error) {
-        intro.textContent = 'The collection is here, but its catalog could not load.';
+        if (intro) intro.textContent = 'The collection is here, but its catalog could not load.';
         grid.innerHTML = '<p class="error-copy">Try refreshing the page, or open the repository to browse the projects directly.</p>';
         console.error(error);
       }
