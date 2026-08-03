@@ -1,0 +1,22 @@
+{
+  "title": "shared",
+  "intro": "Small browser experiments, audiovisual sketches, and alternate ways of making an idea visible.",
+  "projects": [
+    {
+      "path": "./hobbit-threejs/luna/",
+      "name": "Luna",
+      "category": "Hobbit Three.js",
+      "status": "Live",
+      "description": "A realistic 3D village route that turns one page of story into a short audiovisual experience.",
+      "note": "First prompt"
+    },
+    {
+      "path": "./hobbit-threejs/sol/",
+      "name": "Sol",
+      "category": "Hobbit Three.js",
+      "status": "In progress",
+      "description": "A second pass on the same source material, kept beside Luna so the prompt differences stay easy to compare.",
+      "note": "Second prompt"
+    }
+  ]
+}

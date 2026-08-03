@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d1718" />
+    <title>Bag End — A Village Remembers</title>
+  </head>
+  <body>
+    <main id="experience" aria-label="An audiovisual village story">
+      <canvas id="world" aria-label="Three-dimensional village scene"></canvas>
+      <div class="film-grain" aria-hidden="true"></div>
+      <div class="vignette" aria-hidden="true"></div>
+
+      <section id="hud" class="hud" aria-live="polite">
+        <div class="title-lockup">
+          <p class="eyebrow">Hobbiton · a village remembers</p>
+          <h1>Bag End</h1>
+          <p id="beat-label" class="beat-label">The hill wakes slowly</p>
+        </div>
+        <div class="story-meta">
+          <span id="audio-status">Audio preparing</span>
+          <span id="time-readout">00:00 / 02:00</span>
+        </div>
+      </section>
+
+      <div id="caption" class="caption" role="status" aria-live="polite" hidden></div>
+
+      <section id="begin-gate" class="begin-gate" aria-labelledby="gate-title">
+        <div class="gate-card">
+          <p class="eyebrow">An original audiovisual short</p>
+          <h2 id="gate-title">A birthday is coming to Bag End.</h2>
+          <p class="gate-copy">Step into Hobbiton and follow one piece of news as it gathers warmth, wonder, and a little shadow.</p>
+          <button id="begin-button" class="primary-button" type="button">Begin experience <span aria-hidden="true">↗</span></button>
+          <p id="gate-status" class="gate-status">Preparing the village…</p>
+        </div>
+      </section>
+
+      <section class="control-dock" aria-label="Playback controls">
+        <div class="transport-row">
+          <button id="play-button" class="icon-button" type="button" aria-label="Play" aria-pressed="false">Play</button>
+          <button id="restart-button" class="text-button" type="button">Restart</button>
+          <label class="seek-label" for="seek-input"><span class="sr-only">Timeline</span><input id="seek-input" type="range" min="0" max="120" value="0" step="0.1" /></label>
+          <span id="timeline-beat" class="timeline-beat">Opening</span>
+        </div>
+        <div class="mix-row">
+          <button id="mute-button" class="text-button" type="button" aria-pressed="false">Mute</button>
+          <label>Master <input id="master-input" type="range" min="0" max="1" value="0.82" step="0.01" /></label>
+          <label>Voice <input id="narration-input" type="range" min="0" max="1" value="0.96" step="0.01" /></label>
+          <label>World <input id="ambience-input" type="range" min="0" max="1" value="0.28" step="0.01" /></label>
+          <button id="captions-toggle" class="text-button" type="button" aria-pressed="true">Captions</button>
+          <button id="orbit-toggle" class="text-button" type="button" aria-pressed="false">Orbit view</button>
+        </div>
+      </section>
+
+      <aside id="fallback-panel" class="fallback-panel" hidden>
+        <h2>The story is still here.</h2>
+        <p id="fallback-copy">Your browser could not start the 3D view. Captions remain available below.</p>
+      </aside>
+    </main>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

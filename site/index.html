@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#11130f" />
+    <title>shared — experiments worth sending</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">sendhil / shared</p>
+        <h1>Things worth sending.</h1>
+        <p class="hero-copy" id="intro">Loading the collection…</p>
+      </header>
+
+      <section class="collection" aria-labelledby="collection-title">
+        <div class="section-heading">
+          <p class="eyebrow">The shelf</p>
+          <h2 id="collection-title">Experiments</h2>
+        </div>
+        <div id="project-grid" class="project-grid" aria-live="polite"></div>
+      </section>
+
+      <footer class="footer">
+        <span>Built in public, one strange idea at a time.</span>
+        <a href="https://github.com/sendhil/shared">View source on GitHub ↗</a>
+      </footer>
+    </main>
+
+    <script type="module">
+      const intro = document.querySelector('#intro');
+      const grid = document.querySelector('#project-grid');
+
+      const renderProject = (project) => {
+        const article = document.createElement('article');
+        article.className = 'project-card';
+        article.innerHTML = `
+          <div class="card-topline">
+            <span>${project.category}</span>
+            <span class="status status-${project.status.toLowerCase().replaceAll(' ', '-')}">${project.status}</span>
+          </div>
+          <h3>${project.name}</h3>
+          <p>${project.description}</p>
+          <div class="card-footer">
+            <span>${project.note}</span>
+            <a href="${project.path}">${project.status === 'Live' ? 'Open experiment' : 'See the slot'} ↗</a>
+          </div>
+        `;
+        return article;
+      };
+
+      try {
+        const response = await fetch('./catalog.json');
+        if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
+        const catalog = await response.json();
+        intro.textContent = catalog.intro;
+        catalog.projects.forEach((project) => grid.append(renderProject(project)));
+      } catch (error) {
+        intro.textContent = 'The collection is here, but its catalog could not load.';
+        grid.innerHTML = '<p class="error-copy">Try refreshing the page, or open the repository to browse the projects directly.</p>';
+        console.error(error);
+      }
+    </script>
+  </body>
+</html>
