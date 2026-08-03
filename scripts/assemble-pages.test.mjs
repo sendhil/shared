@@ -63,13 +63,56 @@ test('publishes Sol as Live with transparent current-pricing estimates', () => {
   );
   assert.deepEqual(sol.estimate, {
     tokens: '2,088,192 tokens',
-    assumption: 'Estimated from total tokens; current rates use $5/M input and $30/M output, while previous rates follow Luna\'s 5× historical comparison.',
+    assumption: 'Estimated from total tokens using current standard rates of $5/M input and $30/M output; cache usage is unavailable.',
     scenarios: [
-      { label: '80/20 input-output', current: '$20.88', previous: '$104.41' },
-      { label: '50/50 input-output', current: '$36.54', previous: '$182.72' },
-      { label: '100% output', current: '$62.65', previous: '$313.23' },
+      { label: '80/20 input-output', current: '$20.88' },
+      { label: '50/50 input-output', current: '$36.54' },
+      { label: '100% output', current: '$62.65' },
     ],
   });
+});
+
+test('renders current-only Sol pricing without removing Luna history', async () => {
+  const html = readFileSync(new URL('../site/index.html', import.meta.url), 'utf8');
+  const script = html.match(/<script type="module">([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(script, 'landing page module script should exist');
+
+  const grid = {
+    children: [],
+    append(child) { this.children.push(child); },
+    innerHTML: '',
+  };
+  const document = {
+    querySelector(selector) { return selector === '#project-grid' ? grid : null; },
+    createElement() { return { className: '', innerHTML: '' }; },
+  };
+  const catalog = {
+    projects: [
+      {
+        name: 'Luna', category: 'Hobbit Three.js', status: 'Live', note: 'First prompt', path: './luna/',
+        estimate: {
+          tokens: '1 token', assumption: 'Luna estimate',
+          scenarios: [{ label: '80/20 input-output', current: '$1.00', previous: '$5.00' }],
+        },
+      },
+      {
+        name: 'Sol', category: 'Hobbit Three.js', status: 'Live', note: 'Second prompt', path: './sol/',
+        estimate: {
+          tokens: '2 tokens', assumption: 'Sol estimate',
+          scenarios: [{ label: '80/20 input-output', current: '$2.00' }],
+        },
+      },
+    ],
+  };
+  const fetch = async () => ({ ok: true, json: async () => catalog });
+  const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+
+  await new AsyncFunction('document', 'fetch', script)(document, fetch);
+
+  assert.match(grid.children[0].innerHTML, /Previous pricing/);
+  assert.match(grid.children[0].innerHTML, /\$5\.00/);
+  assert.match(grid.children[1].innerHTML, /Current pricing/);
+  assert.doesNotMatch(grid.children[1].innerHTML, /Previous pricing|undefined/);
 });
 
 test('installs, tests, and builds both Luna and Sol before assembly', () => {

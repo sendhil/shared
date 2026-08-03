@@ -40,22 +40,19 @@
       "note": "Second prompt",
       "estimate": {
         "tokens": "2,088,192 tokens",
-        "assumption": "Estimated from total tokens; current rates use $5/M input and $30/M output, while previous rates follow Luna's 5× historical comparison.",
+        "assumption": "Estimated from total tokens using current standard rates of $5/M input and $30/M output; cache usage is unavailable.",
         "scenarios": [
           {
             "label": "80/20 input-output",
-            "current": "$20.88",
-            "previous": "$104.41"
+            "current": "$20.88"
           },
           {
             "label": "50/50 input-output",
-            "current": "$36.54",
-            "previous": "$182.72"
+            "current": "$36.54"
           },
           {
             "label": "100% output",
-            "current": "$62.65",
-            "previous": "$313.23"
+            "current": "$62.65"
           }
         ]
       }

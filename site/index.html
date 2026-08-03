@@ -34,19 +34,25 @@
       const renderProject = (project) => {
         const article = document.createElement('article');
         article.className = 'project-card';
-        const body = project.estimate
+        const hasPreviousPricing = project.estimate?.scenarios.every((scenario) => scenario.previous);
+        const previousPricing = hasPreviousPricing
           ? `
-            <div class="cost-estimate" aria-label="Estimated API cost">
-              <p class="estimate-kicker">Build estimate · ${project.estimate.tokens}</p>
-              <div class="estimate-columns">
-                <div class="estimate-column estimate-current">
-                  <p class="estimate-heading">Current pricing</p>
-                  ${project.estimate.scenarios.map((scenario) => `<div class="estimate-row"><span>${scenario.label}</span><strong>${scenario.current}</strong></div>`).join('')}
-                </div>
                 <div class="estimate-column estimate-previous">
                   <p class="estimate-heading">Previous pricing</p>
                   ${project.estimate.scenarios.map((scenario) => `<div class="estimate-row"><span>${scenario.label}</span><strong>${scenario.previous}</strong></div>`).join('')}
                 </div>
+            `
+          : '';
+        const body = project.estimate
+          ? `
+            <div class="cost-estimate" aria-label="Estimated API cost">
+              <p class="estimate-kicker">Build estimate · ${project.estimate.tokens}</p>
+              <div class="estimate-columns${hasPreviousPricing ? '' : ' estimate-columns-current-only'}">
+                <div class="estimate-column estimate-current">
+                  <p class="estimate-heading">Current pricing</p>
+                  ${project.estimate.scenarios.map((scenario) => `<div class="estimate-row"><span>${scenario.label}</span><strong>${scenario.current}</strong></div>`).join('')}
+                </div>
+                ${previousPricing}
               </div>
               <p class="estimate-note">${project.estimate.assumption}</p>
             </div>
