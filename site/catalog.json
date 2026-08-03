@@ -8,7 +8,15 @@
       "category": "Hobbit Three.js",
       "status": "Live",
       "description": "A realistic 3D village route that turns one page of story into a short audiovisual experience.",
-      "note": "First prompt"
+      "note": "First prompt",
+      "estimate": {
+        "tokens": "949,824 tokens",
+        "current": "$0.38",
+        "currentLabel": "current pricing",
+        "previous": "$1.90",
+        "previousLabel": "previous pricing",
+        "assumption": "80/20 input-output estimate"
+      }
     },
     {
       "path": "./hobbit-threejs/sol/",

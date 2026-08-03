@@ -34,13 +34,23 @@
       const renderProject = (project) => {
         const article = document.createElement('article');
         article.className = 'project-card';
+        const body = project.estimate
+          ? `
+            <div class="cost-estimate" aria-label="Estimated API cost">
+              <p class="estimate-kicker">Build estimate · ${project.estimate.tokens}</p>
+              <div class="estimate-lead"><strong>${project.estimate.current}</strong><span>${project.estimate.currentLabel}</span></div>
+              <div class="estimate-previous">${project.estimate.previous} · ${project.estimate.previousLabel}</div>
+              <p class="estimate-note">${project.estimate.assumption}</p>
+            </div>
+          `
+          : `<p>${project.description}</p>`;
         article.innerHTML = `
           <div class="card-topline">
             <span>${project.category}</span>
             <span class="status status-${project.status.toLowerCase().replaceAll(' ', '-')}">${project.status}</span>
           </div>
           <h3>${project.name}</h3>
-          <p>${project.description}</p>
+          ${body}
           <div class="card-footer">
             <span>${project.note}</span>
             <a href="${project.path}">${project.status === 'Live' ? 'Open experiment' : 'See the slot'} ↗</a>
