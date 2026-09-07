@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#142f32">
+  <meta name="description" content="An original miniature world, a storyteller, and a very unusual birthday. A procedural Three.js literary film.">
+  <title>The Unchanging Hill</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23163e42'/%3E%3Cpath d='M8 48Q32 7 56 48' fill='%2377994b'/%3E%3Cpath d='M26 48V35a6 6 0 0 1 12 0v13' fill='%23ffce82'/%3E%3C/svg%3E">
+</head>
+<body>
+  <main id="experience" aria-label="The Unchanging Hill cinematic experience">
+    <canvas id="world" aria-label="An animated miniature village and the hill at Bag End"></canvas>
+    <div class="frame-top"><span class="wordmark">THE UNCHANGING HILL</span><span id="chapter">HOBBITON · LATE SUMMER</span></div>
+    <div id="curtain"></div>
+    <section id="welcome" aria-labelledby="film-title">
+      <div class="welcome-inner">
+        <span class="eyebrow">A TALE IN MINIATURE</span>
+        <h1 id="film-title">The Unchanging<br><em>Hill</em></h1>
+        <p>One hundred and eleven years.<br>A village full of whispers.</p>
+        <button id="begin" disabled><span class="begin-symbol">▶</span><span id="begin-label">Preparing the storyteller…</span></button>
+        <span class="welcome-note" id="loading-detail">Growing the hillside</span>
+      </div>
+    </section>
+    <div id="caption" class="caption" aria-live="off" hidden></div>
+    <div id="status" role="status" hidden></div>
+    <section id="end-card" hidden>
+      <span class="eyebrow">AND THE HILL KEPT ITS SECRETS</span>
+      <p>The Unchanging Hill</p>
+      <div><button id="replay-end">Watch again</button><button id="explore-end">Stay a little longer</button></div>
+    </section>
+    <section id="transport" aria-label="Playback controls" hidden>
+      <div class="progress-line"><input id="seek" type="range" min="0" max="100" step="0.01" value="0" aria-label="Seek through the story"></div>
+      <div class="control-row">
+        <div class="control-group">
+          <button id="play" class="icon-button" aria-label="Pause" title="Play / pause (Space)">Ⅱ</button>
+          <button id="restart" class="icon-button" aria-label="Restart" title="Restart (R)">↺</button>
+          <span id="time" class="time">0:00 / 0:00</span>
+        </div>
+        <span id="scene-label" class="scene-label">The hillside</span>
+        <div class="control-group">
+          <button id="captions" class="small-button" aria-pressed="false" title="Captions (C)">CC</button>
+          <button id="orbit" class="small-button" aria-pressed="false" title="Explore with the mouse (O)">Explore</button>
+          <button id="mute" class="icon-button" aria-label="Mute" title="Mute (M)">♫</button>
+          <button id="mix-toggle" class="small-button" aria-expanded="false" aria-controls="mixer">Sound</button>
+          <button id="fullscreen" class="icon-button" aria-label="Enter fullscreen" title="Fullscreen (F)">⛶</button>
+        </div>
+      </div>
+      <div id="mixer" hidden>
+        <label>Master<input id="master-volume" type="range" min="0" max="1" value="0.8" step="0.01"></label>
+        <label>Narration<input id="narration-volume" type="range" min="0" max="1" value="1" step="0.01"></label>
+        <label>Ambience<input id="ambience-volume" type="range" min="0" max="1" value="0.65" step="0.01"></label>
+      </div>
+    </section>
+    <div id="orbit-hint" hidden>Drag to look around · Scroll to move closer · O to return to the film</div>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

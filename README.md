@@ -8,11 +8,16 @@ Once GitHub Pages is enabled for this repository, the collection lives at:
 
 <https://sendhil.github.io/shared/>
 
-The two Hobbit Three.js interpretations are:
+The three Hobbit Three.js interpretations are:
 
 <https://sendhil.github.io/shared/hobbit-threejs/luna/>
 
 <https://sendhil.github.io/shared/hobbit-threejs/sol/>
+
+<https://sendhil.github.io/shared/hobbit-threejs/astra/>
+
+The exact reusable prompt shared by Sol and Astra is at
+[hobbit-threejs/shared-prompt.md](./hobbit-threejs/shared-prompt.md).
 
 ## Repository layout
 
@@ -20,6 +25,8 @@ The two Hobbit Three.js interpretations are:
 site/                         showcase landing page
 hobbit-threejs/luna/          live Three.js experiment
 hobbit-threejs/sol/           live second-prompt Three.js experiment
+hobbit-threejs/astra/         live GPT-6 Astra Three.js experiment
+hobbit-threejs/shared-prompt.md  reusable comparison prompt
 .github/workflows/            automatic Pages deployment
 ```
 
@@ -28,7 +35,7 @@ Each experiment owns its source, assets, tests, and local README. The landing pa
 ## Run an experiment locally
 
 ```bash
-cd hobbit-threejs/luna # or hobbit-threejs/sol
+cd hobbit-threejs/astra # or hobbit-threejs/luna / hobbit-threejs/sol
 npm install
 npm run dev
 ```
@@ -44,4 +51,4 @@ npm run build
 
 ## Publishing
 
-The workflow in `.github/workflows/deploy-pages.yml` installs, tests, and builds both Luna and Sol, assembles the landing page plus nested projects, and deploys the result to GitHub Pages. In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions** once.
+The workflow in `.github/workflows/deploy-pages.yml` installs, tests, and builds Luna, Sol, and Astra, assembles the landing page plus nested projects, and deploys the result to GitHub Pages. In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions** once.

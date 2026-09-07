@@ -29,6 +29,7 @@ jobs:
           cache-dependency-path: |
             hobbit-threejs/luna/package-lock.json
             hobbit-threejs/sol/package-lock.json
+            hobbit-threejs/astra/package-lock.json
 
       - name: Install Luna dependencies
         working-directory: hobbit-threejs/luna
@@ -57,6 +58,18 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: ./
+
+      - name: Install Astra dependencies
+        working-directory: hobbit-threejs/astra
+        run: npm ci
+
+      - name: Test Astra
+        working-directory: hobbit-threejs/astra
+        run: npm test
+
+      - name: Build Astra
+        working-directory: hobbit-threejs/astra
+        run: npm run build
 
       - name: Test Pages assembler
         run: node --test scripts/assemble-pages.test.mjs

@@ -16,7 +16,7 @@ test('exposes Pages assembly for isolated verification', () => {
   assert.equal(typeof assembler.assemblePages, 'function');
 });
 
-test('assembles the real Sol build and its required narration assets', (context) => {
+test('assembles all three builds, Astra narration, and the reusable prompt', (context) => {
   const root = mkdtempSync(join(tmpdir(), 'shared-pages-'));
   const output = join(root, '_site');
   context.after(() => rmSync(root, { recursive: true, force: true }));
@@ -34,6 +34,9 @@ test('assembles the real Sol build and its required narration assets', (context)
   write('hobbit-threejs/sol/dist/index.html', 'built Sol');
   write('hobbit-threejs/sol/dist/audio/narration.m4a', 'm4a');
   write('hobbit-threejs/sol/dist/audio/narration.mp3', 'mp3');
+  write('hobbit-threejs/astra/dist/index.html', 'built Astra');
+  write('hobbit-threejs/astra/dist/audio/narration.wav', 'astra wav');
+  write('hobbit-threejs/shared-prompt.md', 'shared prompt');
 
   assembler.assemblePages({ root, output });
 
@@ -49,6 +52,77 @@ test('assembles the real Sol build and its required narration assets', (context)
     readFileSync(join(output, 'hobbit-threejs/sol/audio/narration.mp3'), 'utf8'),
     'mp3',
   );
+  assert.equal(
+    readFileSync(join(output, 'hobbit-threejs/astra/index.html'), 'utf8'),
+    'built Astra',
+  );
+  assert.equal(
+    readFileSync(join(output, 'hobbit-threejs/astra/audio/narration.wav'), 'utf8'),
+    'astra wav',
+  );
+  assert.equal(
+    readFileSync(join(output, 'hobbit-threejs/shared-prompt.md'), 'utf8'),
+    'shared prompt',
+  );
+});
+
+test('publishes Astra with model identity and independently checked cost scenarios', () => {
+  const catalog = JSON.parse(readFileSync(new URL('../site/catalog.json', import.meta.url)));
+  const astra = catalog.projects.find((project) => project.name === 'Astra');
+  const tokens = 664_640;
+  const estimate = (inputShare) => (
+    tokens * inputShare * 10 / 1_000_000
+    + tokens * (1 - inputShare) * 50 / 1_000_000
+  ).toFixed(2);
+
+  assert.equal(astra.path, './hobbit-threejs/astra/');
+  assert.equal(astra.promptPath, './hobbit-threejs/shared-prompt.md');
+  assert.equal(astra.status, 'Live');
+  assert.equal(astra.model, 'GPT-6 Astra');
+  assert.equal(
+    astra.description,
+    'Built with 664,640 tracked tokens. Estimated API cost starts at $11.96 under current standard pricing.',
+  );
+  assert.deepEqual(astra.estimate.scenarios, [
+    { label: '80/20 input-output', current: `$${estimate(0.8)}` },
+    { label: '50/50 input-output', current: `$${estimate(0.5)}` },
+    { label: '100% output', current: `$${estimate(0)}` },
+  ]);
+  assert.match(astra.estimate.assumption, /recovered Astra run/i);
+  assert.match(astra.estimate.assumption, /cache/i);
+  assert.match(astra.estimate.assumption, /272K/i);
+});
+
+test('records Astra run metadata separately from the reusable prompt', () => {
+  const metadata = JSON.parse(readFileSync(
+    new URL('../hobbit-threejs/astra/run-metadata.json', import.meta.url),
+    'utf8',
+  ));
+
+  assert.equal(metadata.model, 'gpt-6-astra');
+  assert.equal(metadata.trackedTokens, 664_640);
+  assert.equal(metadata.goalTokenBudget, 1_000_000);
+  assert.equal(metadata.elapsedSeconds, 7_266);
+  assert.deepEqual(metadata.standardPricingPerMillionTokens, {
+    input: 10,
+    cachedInput: 1,
+    output: 50,
+  });
+  assert.equal(metadata.prompt, '../shared-prompt.md');
+  assert.equal(metadata.usageScope, 'recovered continuation task only');
+});
+
+test('keeps the exact shared prompt available for future model runs', () => {
+  const prompt = readFileSync(
+    new URL('../hobbit-threejs/shared-prompt.md', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(prompt, /^Before doing anything else, create a goal with:/);
+  assert.match(prompt, /token_budget: 1000000/);
+  assert.match(prompt, /SOURCE PASSAGE/);
+  assert.match(prompt, /MANDATORY REFINEMENT PROCESS/);
+  assert.match(prompt, /two consecutive final inspections identify no worthwhile improvement/);
 });
 
 test('publishes Sol as Live with transparent current-pricing estimates', () => {
@@ -72,7 +146,7 @@ test('publishes Sol as Live with transparent current-pricing estimates', () => {
   });
 });
 
-test('renders current-only Sol pricing without removing Luna history', async () => {
+test('renders current-only pricing, Luna history, and a shared-prompt link', async () => {
   const html = readFileSync(new URL('../site/index.html', import.meta.url), 'utf8');
   const script = html.match(/<script type="module">([\s\S]*?)<\/script>/)?.[1];
   assert.ok(script, 'landing page module script should exist');
@@ -97,6 +171,7 @@ test('renders current-only Sol pricing without removing Luna history', async () 
       },
       {
         name: 'Sol', category: 'Hobbit Three.js', status: 'Live', note: 'Second prompt', path: './sol/',
+        promptPath: './shared-prompt.md',
         estimate: {
           tokens: '2 tokens', assumption: 'Sol estimate',
           scenarios: [{ label: '80/20 input-output', current: '$2.00' }],
@@ -113,15 +188,18 @@ test('renders current-only Sol pricing without removing Luna history', async () 
   assert.match(grid.children[0].innerHTML, /\$5\.00/);
   assert.match(grid.children[1].innerHTML, /Current pricing/);
   assert.doesNotMatch(grid.children[1].innerHTML, /Previous pricing|undefined/);
+  assert.match(grid.children[1].innerHTML, /class="cost-estimate" role="group"/);
+  assert.match(grid.children[1].innerHTML, /href="\.\/shared-prompt\.md"/);
+  assert.match(grid.children[1].innerHTML, /Open prompt/);
 });
 
-test('installs, tests, and builds both Luna and Sol before assembly', () => {
+test('installs, tests, and builds Luna, Sol, and Astra before assembly', () => {
   const workflow = readFileSync(
     new URL('../.github/workflows/deploy-pages.yml', import.meta.url),
     'utf8',
   );
 
-  for (const app of ['Luna', 'Sol']) {
+  for (const app of ['Luna', 'Sol', 'Astra']) {
     const directory = app.toLowerCase();
     assert.match(
       workflow,
@@ -145,4 +223,5 @@ test('installs, tests, and builds both Luna and Sol before assembly', () => {
 
   assert.match(workflow, /hobbit-threejs\/luna\/package-lock\.json/);
   assert.match(workflow, /hobbit-threejs\/sol\/package-lock\.json/);
+  assert.match(workflow, /hobbit-threejs\/astra\/package-lock\.json/);
 });

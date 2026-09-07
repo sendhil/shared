@@ -1,0 +1,42 @@
+{
+  "model": "gpt-6-astra",
+  "modelLabel": "GPT-6 Astra",
+  "goalTokenBudget": 1000000,
+  "trackedTokens": 664640,
+  "elapsedSeconds": 7266,
+  "usageScope": "recovered continuation task only",
+  "prompt": "../shared-prompt.md",
+  "pricingCheckedOn": "2026-09-07",
+  "pricingSource": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+  "standardPricingPerMillionTokens": {
+    "input": 10,
+    "cachedInput": 1,
+    "output": 50
+  },
+  "scenarios": [
+    {
+      "label": "80/20 input-output",
+      "inputTokens": 531712,
+      "outputTokens": 132928,
+      "estimatedUsd": 11.96
+    },
+    {
+      "label": "50/50 input-output",
+      "inputTokens": 332320,
+      "outputTokens": 332320,
+      "estimatedUsd": 19.94
+    },
+    {
+      "label": "100% output",
+      "inputTokens": 0,
+      "outputTokens": 664640,
+      "estimatedUsd": 33.23
+    }
+  ],
+  "excluded": [
+    "cached-input savings",
+    "tool-specific charges",
+    "request-level long-context multipliers",
+    "usage from the original stalled task"
+  ]
+}

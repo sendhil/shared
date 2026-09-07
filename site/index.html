@@ -35,6 +35,12 @@
         const article = document.createElement('article');
         article.className = 'project-card';
         const hasPreviousPricing = project.estimate?.scenarios.every((scenario) => scenario.previous);
+        const estimateLabel = project.model
+          ? `${project.model} · ${project.estimate.tokens}`
+          : `Build estimate · ${project.estimate.tokens}`;
+        const promptLink = project.promptPath
+          ? `<a href="${project.promptPath}">Open prompt</a>`
+          : '';
         const previousPricing = hasPreviousPricing
           ? `
                 <div class="estimate-column estimate-previous">
@@ -45,8 +51,8 @@
           : '';
         const body = project.estimate
           ? `
-            <div class="cost-estimate" aria-label="Estimated API cost">
-              <p class="estimate-kicker">Build estimate · ${project.estimate.tokens}</p>
+            <div class="cost-estimate" role="group" aria-label="Estimated API cost">
+              <p class="estimate-kicker">${estimateLabel}</p>
               <div class="estimate-columns${hasPreviousPricing ? '' : ' estimate-columns-current-only'}">
                 <div class="estimate-column estimate-current">
                   <p class="estimate-heading">Current pricing</p>
@@ -67,7 +73,10 @@
           ${body}
           <div class="card-footer">
             <span>${project.note}</span>
-            <a href="${project.path}">${project.status === 'Live' ? 'Open experiment' : 'See the slot'} ↗</a>
+            <div class="card-links">
+              ${promptLink}
+              <a href="${project.path}">${project.status === 'Live' ? 'Open experiment' : 'See the slot'} ↗</a>
+            </div>
           </div>
         `;
         return article;

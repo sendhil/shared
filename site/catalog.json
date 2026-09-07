@@ -38,6 +38,7 @@
       "status": "Live",
       "description": "Built with 2,088,192 tokens. Estimated API cost starts at $20.88 under current pricing.",
       "note": "Second prompt",
+      "promptPath": "./hobbit-threejs/shared-prompt.md",
       "estimate": {
         "tokens": "2,088,192 tokens",
         "assumption": "Estimated from total tokens using current standard rates of $5/M input and $30/M output; cache usage is unavailable.",
@@ -53,6 +54,34 @@
           {
             "label": "100% output",
             "current": "$62.65"
+          }
+        ]
+      }
+    },
+    {
+      "path": "./hobbit-threejs/astra/",
+      "promptPath": "./hobbit-threejs/shared-prompt.md",
+      "name": "Astra",
+      "model": "GPT-6 Astra",
+      "category": "Hobbit Three.js",
+      "status": "Live",
+      "description": "Built with 664,640 tracked tokens. Estimated API cost starts at $11.96 under current standard pricing.",
+      "note": "Shared prompt · third run",
+      "estimate": {
+        "tokens": "664,640 tracked tokens",
+        "assumption": "Recovered Astra run only. Estimates use current standard rates of $10/M input and $50/M output; cache usage, tool charges, the original stalled run, and request-level 272K long-context pricing are unavailable.",
+        "scenarios": [
+          {
+            "label": "80/20 input-output",
+            "current": "$11.96"
+          },
+          {
+            "label": "50/50 input-output",
+            "current": "$19.94"
+          },
+          {
+            "label": "100% output",
+            "current": "$33.23"
           }
         ]
       }

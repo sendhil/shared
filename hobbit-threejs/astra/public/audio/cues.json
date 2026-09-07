@@ -1,0 +1,149 @@
+{
+  "title": "The Unchanging Hill",
+  "voice": "bm_george",
+  "engine": "Kokoro 82M / ONNX, generated locally",
+  "speed": 0.93,
+  "sampleRate": 24000,
+  "duration": 93.13458333333334,
+  "source": "When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton.\n\nBilbo was very rich and very peculiar, and had been the wonder of the Shire for sixty years, ever since his remarkable disappearance and unexpected return. The riches he had brought back from his travels had now become a local legend, and it was popularly believed, whatever the old folk might say, that the Hill at Bag End was full of tunnels stuffed with treasure. And if that was not enough for fame, there was also his prolonged vigour to marvel at. Time wore on, but it seemed to have little effect on Mr. Baggins. At ninety he was much the same as at fifty. At ninety-nine they began to call him well-preserved; but unchanged would have been nearer the mark. There were some that shook their heads and thought this was too much of a good thing; it seemed unfair that anyone should possess (apparently) perpetual youth as well as (reputedly) inexhaustible wealth.\n\n'It will have to be paid for,' they said. 'It isn't natural, and trouble will come of it!'",
+  "cues": [
+    {
+      "id": 0,
+      "text": "When Mr. Bilbo Baggins of Bag End announced",
+      "start": 1.6,
+      "end": 4.82133
+    },
+    {
+      "id": 1,
+      "text": "that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence,",
+      "start": 5.00133,
+      "end": 11.646
+    },
+    {
+      "id": 2,
+      "text": "there was much talk and excitement in Hobbiton.",
+      "start": 11.826,
+      "end": 15.12067
+    },
+    {
+      "id": 3,
+      "text": "Bilbo was very rich and very peculiar,",
+      "start": 15.82067,
+      "end": 19.04067
+    },
+    {
+      "id": 4,
+      "text": "and had been the wonder of the Shire for sixty years,",
+      "start": 19.22067,
+      "end": 22.452
+    },
+    {
+      "id": 5,
+      "text": "ever since his remarkable disappearance and unexpected return.",
+      "start": 22.632,
+      "end": 27.47396
+    },
+    {
+      "id": 6,
+      "text": "The riches he had brought back from his travels had now become a local legend,",
+      "start": 28.17396,
+      "end": 33.24996
+    },
+    {
+      "id": 7,
+      "text": "and it was popularly believed, whatever the old folk might say,",
+      "start": 33.42996,
+      "end": 37.48196
+    },
+    {
+      "id": 8,
+      "text": "that the Hill at Bag End was full of tunnels stuffed with treasure.",
+      "start": 37.66196,
+      "end": 42.05463
+    },
+    {
+      "id": 9,
+      "text": "And if that was not enough for fame,",
+      "start": 42.75462,
+      "end": 45.21663
+    },
+    {
+      "id": 10,
+      "text": "there was also his prolonged vigour to marvel at.",
+      "start": 45.39663,
+      "end": 48.91592
+    },
+    {
+      "id": 11,
+      "text": "Time wore on,",
+      "start": 49.34592,
+      "end": 50.65725
+    },
+    {
+      "id": 12,
+      "text": "but it seemed to have little effect on Mr. Baggins.",
+      "start": 50.83725,
+      "end": 54.33392
+    },
+    {
+      "id": 13,
+      "text": "At ninety he was much the same as at fifty.",
+      "start": 54.76392,
+      "end": 58.13258
+    },
+    {
+      "id": 14,
+      "text": "At ninety-nine they began to call him well-preserved;",
+      "start": 58.56258,
+      "end": 62.47658
+    },
+    {
+      "id": 15,
+      "text": "but unchanged would have been nearer the mark.",
+      "start": 62.90658,
+      "end": 66.07325
+    },
+    {
+      "id": 16,
+      "text": "There were some that shook their heads and thought this was too much of a good thing;",
+      "start": 66.50325,
+      "end": 71.24658
+    },
+    {
+      "id": 17,
+      "text": "it seemed unfair that anyone should possess (apparently) perpetual youth",
+      "start": 71.67658,
+      "end": 76.58325
+    },
+    {
+      "id": 18,
+      "text": "as well as (reputedly) inexhaustible wealth.",
+      "start": 76.76325,
+      "end": 80.48592
+    },
+    {
+      "id": 19,
+      "text": "'It will have to be paid for,'",
+      "start": 81.18592,
+      "end": 83.05192
+    },
+    {
+      "id": 20,
+      "text": "they said.",
+      "start": 83.23192,
+      "end": 84.37325
+    },
+    {
+      "id": 21,
+      "text": "'It isn't natural,",
+      "start": 84.80325,
+      "end": 86.38058
+    },
+    {
+      "id": 22,
+      "text": "and trouble will come of it!'",
+      "start": 86.56058,
+      "end": 88.70458
+    }
+  ]
+}

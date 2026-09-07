@@ -20,6 +20,8 @@ export function assemblePages({
   copy('site', '.');
   copy('hobbit-threejs/luna/dist', 'hobbit-threejs/luna');
   copy('hobbit-threejs/sol/dist', 'hobbit-threejs/sol');
+  copy('hobbit-threejs/astra/dist', 'hobbit-threejs/astra');
+  copy('hobbit-threejs/shared-prompt.md', 'hobbit-threejs/shared-prompt.md');
 
   const required = [
     'index.html',
@@ -28,6 +30,9 @@ export function assemblePages({
     'hobbit-threejs/sol/index.html',
     'hobbit-threejs/sol/audio/narration.m4a',
     'hobbit-threejs/sol/audio/narration.mp3',
+    'hobbit-threejs/astra/index.html',
+    'hobbit-threejs/astra/audio/narration.wav',
+    'hobbit-threejs/shared-prompt.md',
   ];
 
   const missing = required.filter((path) => !existsSync(resolve(output, path)));
