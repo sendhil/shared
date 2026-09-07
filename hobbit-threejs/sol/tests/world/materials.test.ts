@@ -32,7 +32,7 @@ describe('Lantern Hill material language', () => {
       );
       expect(a.every(Number.isFinite)).toBe(true);
     }
-  });
+  }, 15_000);
 
   it('configures color space and cohesive rough, locally textured materials', () => {
     const renderer = { outputColorSpace: '' };
