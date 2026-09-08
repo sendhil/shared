@@ -1,0 +1,21 @@
+{
+  "name": "hillside-birthday",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "@types/three": "^0.180.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.2.1",
+    "vitest": "^3.0.7"
+  }
+}
