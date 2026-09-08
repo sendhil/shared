@@ -30,6 +30,12 @@ npm run build
 
 The primary narrator is a real `HTMLAudioElement`, not a timer approximation. Once its metadata arrives, cue boundaries are rebuilt from the audio's actual duration. Rendering, camera direction, character posing, particles, captions, and ambience all query that same media time. If the local file cannot load, the app falls back to browser Speech Synthesis and clearly identifies the reduced seeking behavior.
 
+## Public run and cost context
+
+The published film is available at [sendhil.github.io/shared/hobbit-threejs/terra/](https://sendhil.github.io/shared/hobbit-threejs/terra/).
+
+This run used 84,924 tracked tokens. At the current standard GPT-5.6 Terra rates of $2/M input, $0.20/M cached input, and $12/M output, its estimated model cost is $0.34 with an 80/20 input/output split, $0.59 with a 50/50 split, and at most $1.02 if every tracked token were output. Aggregate tracking cannot determine the actual input/output mix, cache hits, tool charges, or request-level long-context pricing; the machine-readable record is in [`run-metadata.json`](./run-metadata.json), with the official rate source linked there.
+
 ## Project layout
 
 - `src/world/` — procedural terrain, house façade, village, materials, sky, lights, and atmospheric effects

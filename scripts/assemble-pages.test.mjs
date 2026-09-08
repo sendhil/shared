@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {
   mkdirSync,
   mkdtempSync,
+  existsSync,
   readFileSync,
   rmSync,
   writeFileSync,
@@ -16,7 +17,7 @@ test('exposes Pages assembly for isolated verification', () => {
   assert.equal(typeof assembler.assemblePages, 'function');
 });
 
-test('assembles all three builds, Astra narration, and the reusable prompt', (context) => {
+test('assembles all four builds, their narration assets, and the reusable prompt', (context) => {
   const root = mkdtempSync(join(tmpdir(), 'shared-pages-'));
   const output = join(root, '_site');
   context.after(() => rmSync(root, { recursive: true, force: true }));
@@ -36,6 +37,8 @@ test('assembles all three builds, Astra narration, and the reusable prompt', (co
   write('hobbit-threejs/sol/dist/audio/narration.mp3', 'mp3');
   write('hobbit-threejs/astra/dist/index.html', 'built Astra');
   write('hobbit-threejs/astra/dist/audio/narration.wav', 'astra wav');
+  write('hobbit-threejs/terra/dist/index.html', 'built Terra');
+  write('hobbit-threejs/terra/dist/audio/narration.m4a', 'terra m4a');
   write('hobbit-threejs/shared-prompt.md', 'shared prompt');
 
   assembler.assemblePages({ root, output });
@@ -59,6 +62,16 @@ test('assembles all three builds, Astra narration, and the reusable prompt', (co
   assert.equal(
     readFileSync(join(output, 'hobbit-threejs/astra/audio/narration.wav'), 'utf8'),
     'astra wav',
+  );
+  assert.ok(existsSync(join(output, 'hobbit-threejs/terra/index.html')));
+  assert.equal(
+    readFileSync(join(output, 'hobbit-threejs/terra/index.html'), 'utf8'),
+    'built Terra',
+  );
+  assert.ok(existsSync(join(output, 'hobbit-threejs/terra/audio/narration.m4a')));
+  assert.equal(
+    readFileSync(join(output, 'hobbit-threejs/terra/audio/narration.m4a'), 'utf8'),
+    'terra m4a',
   );
   assert.equal(
     readFileSync(join(output, 'hobbit-threejs/shared-prompt.md'), 'utf8'),
@@ -91,6 +104,30 @@ test('publishes Astra with model identity and independently checked cost scenari
   assert.match(astra.estimate.assumption, /recovered Astra run/i);
   assert.match(astra.estimate.assumption, /cache/i);
   assert.match(astra.estimate.assumption, /272K/i);
+});
+
+test('publishes Terra with official pricing scenarios', () => {
+  const catalog = JSON.parse(readFileSync(new URL('../site/catalog.json', import.meta.url)));
+  const terra = catalog.projects.find((project) => project.name === 'Terra');
+  const tokens = 84_924;
+  const estimate = (inputShare) => (
+    tokens * inputShare * 2 / 1_000_000
+    + tokens * (1 - inputShare) * 12 / 1_000_000
+  ).toFixed(2);
+
+  assert.ok(terra);
+  assert.equal(terra.path, './hobbit-threejs/terra/');
+  assert.equal(terra.promptPath, './hobbit-threejs/shared-prompt.md');
+  assert.equal(terra.model, 'GPT-5.6 Terra');
+  assert.equal(terra.status, 'Live');
+  assert.equal(terra.description, 'Built with 84,924 tracked tokens. Estimated API cost starts at $0.34 under current standard pricing.');
+  assert.deepEqual(terra.estimate.scenarios, [
+    { label: '80/20 input-output', current: `$${estimate(0.8)}` },
+    { label: '50/50 input-output', current: `$${estimate(0.5)}` },
+    { label: '100% output', current: `$${estimate(0)}` },
+  ]);
+  assert.match(terra.estimate.assumption, /cache/i);
+  assert.match(terra.estimate.assumption, /tool/i);
 });
 
 test('records Astra run metadata separately from the reusable prompt', () => {
@@ -193,13 +230,13 @@ test('renders current-only pricing, Luna history, and a shared-prompt link', asy
   assert.match(grid.children[1].innerHTML, /Open prompt/);
 });
 
-test('installs, tests, and builds Luna, Sol, and Astra before assembly', () => {
+test('installs, tests, and builds Luna, Sol, Astra, and Terra before assembly', () => {
   const workflow = readFileSync(
     new URL('../.github/workflows/deploy-pages.yml', import.meta.url),
     'utf8',
   );
 
-  for (const app of ['Luna', 'Sol', 'Astra']) {
+  for (const app of ['Luna', 'Sol', 'Astra', 'Terra']) {
     const directory = app.toLowerCase();
     assert.match(
       workflow,
@@ -224,4 +261,5 @@ test('installs, tests, and builds Luna, Sol, and Astra before assembly', () => {
   assert.match(workflow, /hobbit-threejs\/luna\/package-lock\.json/);
   assert.match(workflow, /hobbit-threejs\/sol\/package-lock\.json/);
   assert.match(workflow, /hobbit-threejs\/astra\/package-lock\.json/);
+  assert.match(workflow, /hobbit-threejs\/terra\/package-lock\.json/);
 });

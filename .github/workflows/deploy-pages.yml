@@ -30,6 +30,7 @@ jobs:
             hobbit-threejs/luna/package-lock.json
             hobbit-threejs/sol/package-lock.json
             hobbit-threejs/astra/package-lock.json
+            hobbit-threejs/terra/package-lock.json
 
       - name: Install Luna dependencies
         working-directory: hobbit-threejs/luna
@@ -69,6 +70,18 @@ jobs:
 
       - name: Build Astra
         working-directory: hobbit-threejs/astra
+        run: npm run build
+
+      - name: Install Terra dependencies
+        working-directory: hobbit-threejs/terra
+        run: npm ci
+
+      - name: Test Terra
+        working-directory: hobbit-threejs/terra
+        run: npm test -- --run
+
+      - name: Build Terra
+        working-directory: hobbit-threejs/terra
         run: npm run build
 
       - name: Test Pages assembler

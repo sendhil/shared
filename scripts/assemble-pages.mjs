@@ -21,6 +21,7 @@ export function assemblePages({
   copy('hobbit-threejs/luna/dist', 'hobbit-threejs/luna');
   copy('hobbit-threejs/sol/dist', 'hobbit-threejs/sol');
   copy('hobbit-threejs/astra/dist', 'hobbit-threejs/astra');
+  copy('hobbit-threejs/terra/dist', 'hobbit-threejs/terra');
   copy('hobbit-threejs/shared-prompt.md', 'hobbit-threejs/shared-prompt.md');
 
   const required = [
@@ -32,6 +33,8 @@ export function assemblePages({
     'hobbit-threejs/sol/audio/narration.mp3',
     'hobbit-threejs/astra/index.html',
     'hobbit-threejs/astra/audio/narration.wav',
+    'hobbit-threejs/terra/index.html',
+    'hobbit-threejs/terra/audio/narration.m4a',
     'hobbit-threejs/shared-prompt.md',
   ];
 

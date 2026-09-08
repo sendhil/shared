@@ -85,6 +85,34 @@
           }
         ]
       }
+    },
+    {
+      "path": "./hobbit-threejs/terra/",
+      "promptPath": "./hobbit-threejs/shared-prompt.md",
+      "name": "Terra",
+      "model": "GPT-5.6 Terra",
+      "category": "Hobbit Three.js",
+      "status": "Live",
+      "description": "Built with 84,924 tracked tokens. Estimated API cost starts at $0.34 under current standard pricing.",
+      "note": "Shared prompt · fourth run",
+      "estimate": {
+        "tokens": "84,924 tracked tokens",
+        "assumption": "Estimated from aggregate tracked usage using current standard rates of $2/M input and $12/M output; input/output split, cache usage, tool charges, and request-level long-context pricing are unavailable.",
+        "scenarios": [
+          {
+            "label": "80/20 input-output",
+            "current": "$0.34"
+          },
+          {
+            "label": "50/50 input-output",
+            "current": "$0.59"
+          },
+          {
+            "label": "100% output",
+            "current": "$1.02"
+          }
+        ]
+      }
     }
   ]
 }
